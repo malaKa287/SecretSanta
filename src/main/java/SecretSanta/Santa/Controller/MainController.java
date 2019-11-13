@@ -31,7 +31,8 @@ public class MainController {
     @PostMapping("/santa")
 //    public @ResponseBody User
 //    public String confirmUser(@ModelAttribute UserList users) {
-    public String confirmUser(@ModelAttribute User user) {
+//    public String confirmUser(@ModelAttribute User user) {
+    public String confirmUser(@ModelAttribute List<User> user) {
 //        this.user.setEmail(user.getEmail());
 
         System.out.println(user);
