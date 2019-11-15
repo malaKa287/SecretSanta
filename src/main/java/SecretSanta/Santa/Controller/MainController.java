@@ -36,7 +36,7 @@ public class MainController {
 //        this.user.setEmail(user.getEmail());
 
         String[] allEmails = email.getEmail().split(",");
-        emailComponent.setEmails(Arrays.asList(allEmails));
+//        emailComponent.setEmails(Arrays.asList(allEmails));
 
         for (int i = 0; i < allEmails.length; i++) {
             emailComponent.setEmailsMap(i+1, allEmails[i]);
