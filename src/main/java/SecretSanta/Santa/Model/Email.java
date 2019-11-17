@@ -18,9 +18,9 @@ import java.util.Map;
 public class Email {
     private String email;
     private List<String> emails;
-    private Map<Integer, String> emailsMap = new HashMap<>();
+    private Map<String, String> emailsMap = new HashMap<>();
 
-    public void setEmailsMap(int key, String value) {
+    public void setEmailsMap(String key, String value) {
         emailsMap.put(key, value);
     }
 }

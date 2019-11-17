@@ -39,7 +39,7 @@ public class MainController {
 //        emailComponent.setEmails(Arrays.asList(allEmails));
 
         for (int i = 0; i < allEmails.length; i++) {
-            emailComponent.setEmailsMap(i+1, allEmails[i]);
+            emailComponent.setEmailsMap(String.valueOf(i+1), allEmails[i]);
         }
 
         return "redirect:/sendEmail";

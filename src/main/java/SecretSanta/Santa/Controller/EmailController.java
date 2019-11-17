@@ -19,55 +19,56 @@ public class EmailController {
     public String sendEmail() {
         System.out.println(email.getEmailsMap());
 
-        for (int i = 0; i < 100; i++) {
-            System.out.println("+++++ " + i);
-            System.out.println("final random: " + randomPair());
+        for (int i = 0; i < 100; i++){
+            randomPair();
         }
-
 
         return "santa";
     }
 
     public List<Integer> randomPair() {
-        System.out.println("!!!!!!!!");
-        List<Integer> integers = IntStream.range(1, email.getEmailsMap().size() + 1)
+        List<Integer> randomList = IntStream.range(1, email.getEmailsMap().size() + 1)
                 .boxed()
                 .collect(Collectors.toList());
-//        List<Integer> random = new ArrayList();
-//                random.add(1);
-//                random.add(2);
-//                random.add(3);
 
-        Collections.shuffle(integers);
+        Map<String, String> pairMap = new HashMap<>();
+        Map<String, String> emailsMap = email.getEmailsMap();
 
-        Map map = email.getEmailsMap();
+        shuffleCollection(randomList, emailsMap);
 
-        List<Integer> random = new ArrayList<>(integers);
+        System.out.println("randomList: " + randomList);
 
-        System.out.println("random: " + random);
-
-        for (int i = 0; i < random.size(); i++) {
+        //generate paired map
+        for (int i = 0; i < randomList.size(); i++){
             try {
-                if (map.get(random.get(i)).equals("email1") && map.get(random.get(i + 1)).equals("email2")) {
-                    randomPair();
+                pairMap.put(emailsMap.get(randomList.get(i).toString()), emailsMap.get(randomList.get(i + 1).toString()));
+            } catch (IndexOutOfBoundsException e){
+                pairMap.put(emailsMap.get(randomList.get(randomList.size() - 1).toString()), emailsMap.get(randomList.get(0).toString()));
+            }
+        }
+
+        System.out.println("pairMap: " + pairMap);
+        System.out.println("-------------");
+
+        return randomList;
+    }
+
+    public static List<Integer> shuffleCollection(List<Integer> randomList, Map emailsMap) {
+        Collections.shuffle(randomList);
+
+        for (int i = 0; i < randomList.size(); i++) {
+            try {
+                if (emailsMap.get(randomList.get(i).toString()).equals("email1") && emailsMap.get(randomList.get(i + 1).toString()).equals("email2")) {
+                    shuffleCollection(randomList, emailsMap);
                 }
             } catch (IndexOutOfBoundsException e) {
                 System.out.println("IndexOutOfBoundsException");
 
-                if (map.get(random.get(random.size() - 1)).equals("email1") && map.get(random.get(0)).equals("email2")) {
-                    randomPair();
+                if (emailsMap.get(randomList.get(randomList.size() - 1).toString()).equals("email1") && emailsMap.get(randomList.get(0).toString()).equals("email2")) {
+                    shuffleCollection(randomList, emailsMap);
                 }
             }
         }
-
-        System.out.println("final: " + random);
-        System.out.println("-------------");
-
-        return random;
-    }
-
-    public static List<Integer> shuffleCollection(List<Integer> list){
-
-        return new ArrayList<>();
+        return randomList;
     }
 }
