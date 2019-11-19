@@ -6,6 +6,9 @@ import lombok.Setter;
 import lombok.ToString;
 import org.springframework.stereotype.Component;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,7 +18,10 @@ import java.util.Map;
 @Setter
 @ToString
 @NoArgsConstructor
-public class Email {
+public class EmailModel {
+
+    @NotNull
+    @Email(message = "wrong email")
     private String email;
     private List<String> emails;
     private Map<String, String> emailsMap = new HashMap<>();

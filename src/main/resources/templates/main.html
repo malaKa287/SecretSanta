@@ -1,10 +1,14 @@
 <!DOCTYPE HTML>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org" lang="en">
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Secret Santa</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <script th:src="@{/js/jquery-min-3.4.1.js}" type="text/javascript"></script>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+          crossorigin="anonymous"></link>
 </head>
 <body>
 
@@ -16,14 +20,37 @@
     <div id="dynamic_ingredients">
         <a id="add-ingredient" href="#">Add email</a>
         <div class="ingredient_field">
-
             <p id="emailInput">Email: <input type="text" th:field="*{email}"/></p>
-
+            <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" th:errorclass="form-field-error"></span>
         </div>
     </div>
-    <!--<p><input type="submit" value="Submit" action="#" th:action="@{/sendEmail}" method="get"/> <input type="reset" value="Reset"/></p>-->
     <p><input type="submit" value="Submit"/> <input type="reset" value="Reset"/></p>
 </form>
+
+<!--<form id="form" action="#" th:action="@{/santa}" th:object="${emails}" method="post">-->
+<!--<div id="dynamic_ingredients">-->
+<!--<a id="add-ingredient" href="#">Add email</a>-->
+<!--<div class="ingredient_field">-->
+<!--<ul>-->
+<!--<li id="emailInput">Email: <input type="text" th:field="*{email}"/>-->
+<!--<span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"-->
+<!--th:errorclass="form-field-error"></span>-->
+<!--</ul>-->
+
+<!--</div>-->
+<!--</div>-->
+<!--<p><input type="submit" value="Submit"/> <input type="reset" value="Reset"/></p>-->
+<!--</form>-->
+
+<script src="https://code.jquery.com/jquery-1.11.1.min.js"
+        integrity="sha256-VAvG3sHdS5LqTT+5A/aeq/bZGa/Uj04xKxY8KM/w9EE="
+        crossorigin="anonymous"></script>
+
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
+
 
 </body>
 </html>

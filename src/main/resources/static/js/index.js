@@ -6,7 +6,6 @@ $(document).ready(function(){
         $(this).parent().remove();
     });
     //Keep a single clone of the original
-//    var clonedField = $('.ingredient_field').clone(),
     var clonedField = $('#emailInput').clone(),
     main = $('#dynamic_ingredients');
 
