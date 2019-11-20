@@ -15,7 +15,6 @@ public class UserDataController {
     UserDataService emailService;
 
 
-
     @GetMapping("/santa")
     public String showPage(Model model){
         model.addAttribute("data", emailService.findAll());

@@ -28,42 +28,41 @@ public class EmailController {
     JavaMailSender javaMailSender;
 
     @GetMapping("/sendEmail")
-    public String sendEmail(){
+    public String sendEmail() {
         System.out.println(userDataService.findAll());
 
+        List<UserData> userDataList = userDataService.findAll();
+
+//        for (int i = 0; i < 10; i++) {
+            List<UserData> shuffledList = shuffleCollection(userDataList);
+            System.out.println(shuffledList);
+//        }
 
 
         return "santa";
     }
 
-    private Map<String,String> pairedMap = new HashMap<>();
+    private Map<String, String> pairedMap = new HashMap<>();
 
-    @GetMapping("/sendEmail1")
-    public String sendEmail1() {
-        System.out.println(emailModel.getEmailsMap());
 
-        randomPair();
-
-        System.out.println(pairedMap);
-
-        sendMail();
-
-        return "santa";
-    }
-
-    public void sendMail() {
+    public void sendMail(List<UserData> userDataList) {
         MimeMessage message = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = null;
 
-
-        for (Map.Entry<String, String> entry : pairedMap.entrySet()) {
+        for (int i = 0; i < userDataList.size(); i++) {
+            String emailTo;
+            String recipientName;
             try {
-                String emailFrom = entry.getKey();
-                String emailTo = entry.getValue();
-
+                if (i == (userDataList.size() - 1)) {
+                    emailTo = userDataList.get(i).getEmail();
+                    recipientName = userDataList.get(0).getName();
+                } else {
+                    emailTo = userDataList.get(i).getEmail();
+                    recipientName = userDataList.get(i + 1).getName();
+                }
                 helper = new MimeMessageHelper(message, true);
-                helper.setTo(emailFrom);
-                helper.setText("Ho ho ho, Santa is coming. " + emailTo + " already waiting for your gift.");
+                helper.setTo(emailTo);
+                helper.setText("Ho ho ho, Santa is coming. " + recipientName + " already waiting for your gift.");
                 helper.setSubject("Secret Santa");
 //                FileSystemResource fileSystemResource = new FileSystemResource(new File("src\\main\\resources\\output\\file.xlsx"));
 //                helper.addAttachment("file.xlsx", fileSystemResource, "application/octet-stream;");
@@ -76,58 +75,31 @@ public class EmailController {
         }
     }
 
-    public void randomPair() {
-        List<Integer> randomList = IntStream.range(1, emailModel.getEmailsMap().size() + 1)
-                .boxed()
-                .collect(Collectors.toList());
 
-        Map<String, String> emailsMap = emailModel.getEmailsMap();
+    public static List<UserData> shuffleCollection(List<UserData> userDataList) {
+        Collections.shuffle(userDataList);
 
-        shuffleCollection(randomList, emailsMap);
+        for (int i = 0; i < userDataList.size(); i++) {
+            String emailFrom;
+            String emailTo;
 
-        System.out.println("randomList: " + randomList);
-
-        //generate paired map
-        for (int i = 0; i < randomList.size(); i++) {
-            try {
-                String emailFrom = emailsMap.get(randomList.get(i).toString());
-                String emailTo = emailsMap.get(randomList.get(i + 1).toString());
-
-                pairedMap.put(emailFrom, emailTo);
-            } catch (IndexOutOfBoundsException e) {
-                String emailFrom = emailsMap.get(randomList.get(randomList.size() - 1).toString());
-                String emailTo = emailsMap.get(randomList.get(0).toString());
-
-                pairedMap.put(emailFrom, emailTo);
-            }
-        }
-
-        System.out.println("pairMap: " + pairedMap);
-        System.out.println("-------------");
-    }
-
-    public static List<Integer> shuffleCollection(List<Integer> randomList, Map<String, String> emailsMap) {
-        Collections.shuffle(randomList);
-
-        for (int i = 0; i < randomList.size(); i++) {
-            try {
-                String emailFrom = emailsMap.get(randomList.get(i).toString());
-                String emailTo = emailsMap.get(randomList.get(i + 1).toString());
+            if (i == (userDataList.size() - 1)) {
+                emailFrom = userDataList.get(i).getEmail();
+                emailTo = userDataList.get(0).getEmail();
 
                 if (emailFrom.equals("email1") && emailTo.equals("email2")) {
-                    shuffleCollection(randomList, emailsMap);
+                    shuffleCollection(userDataList);
                 }
-            } catch (IndexOutOfBoundsException e) {
-                System.out.println("IndexOutOfBoundsException");
+            } else {
+                emailFrom = userDataList.get(i).getEmail();
+                emailTo = userDataList.get(i + 1).getEmail();
+            }
 
-                String emailFrom = emailsMap.get(randomList.get(randomList.size() - 1).toString());
-                String emailTo = emailsMap.get(randomList.get(0).toString());
-
-                if (emailFrom.equals("email1") && emailTo.equals("email2")) {
-                    shuffleCollection(randomList, emailsMap);
-                }
+            if (emailFrom.equals("email1") && emailTo.equals("email2")) {
+                shuffleCollection(userDataList);
             }
         }
-        return randomList;
+        return userDataList;
     }
+
 }
