@@ -9,12 +9,12 @@ import lombok.ToString;
 @Setter
 @NoArgsConstructor
 @ToString
-public class UserEmailName {
+public class UserData {
     private long id;
     private String name;
     private String email;
 
-    public UserEmailName(String name, String email) {
+    public UserData(String name, String email) {
         this.name = name;
         this.email = email;
     }

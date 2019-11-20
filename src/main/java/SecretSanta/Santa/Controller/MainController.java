@@ -20,7 +20,7 @@ public class MainController {
     @Autowired
     EmailModel emailComponent;
 
-    @GetMapping("/santa")
+    @GetMapping("/santa1")
     public String userForm(Model model) {
 //        model.addAttribute("users", new UserList());
         model.addAttribute("emails", new EmailModel());

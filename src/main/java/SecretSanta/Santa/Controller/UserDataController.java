@@ -1,7 +1,7 @@
 package SecretSanta.Santa.Controller;
 
-import SecretSanta.Santa.Model.NewEmailService;
-import SecretSanta.Santa.Model.UserEmailName;
+import SecretSanta.Santa.Model.UserDataService;
+import SecretSanta.Santa.Model.UserData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,12 +9,14 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 //@RequestMapping("/new")
-public class NewEmailController {
+public class UserDataController {
 
     @Autowired
-    NewEmailService emailService;
+    UserDataService emailService;
 
-    @GetMapping("/")
+
+
+    @GetMapping("/santa")
     public String showPage(Model model){
         model.addAttribute("data", emailService.findAll());
 
@@ -22,29 +24,29 @@ public class NewEmailController {
     }
 
     @PostMapping("/save")
-    public String save(UserEmailName emailName){
+    public String save(UserData emailName){
         emailService.save(emailName);
 
-        return "redirect:/";
+        return "redirect:/santa";
     }
 
     @PutMapping("/update")
-    public String update(UserEmailName emailName){
+    public String update(UserData emailName){
         emailService.update(emailName);
 
-        return "redirect:/";
+        return "redirect:/santa";
     }
 
     @GetMapping("/delete")
     public String delete(long id){
         emailService.delete(id);
 
-        return "redirect:/";
+        return "redirect:/santa";
     }
 
     @GetMapping("/findOne")
     @ResponseBody
-    public UserEmailName findOne(long id){
+    public UserData findOne(long id){
         return emailService.findOne(id);
     }
 }

@@ -4,26 +4,25 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
-public class NewEmailService {
-    private List<UserEmailName> userEmails = new ArrayList<>();
+public class UserDataService {
+    private List<UserData> userEmails = new ArrayList<>();
 
-    public List<UserEmailName> findAll() {
+    public List<UserData> findAll() {
         return this.userEmails;
     }
 
-    public void save(UserEmailName userEmail) {
+    public void save(UserData userEmail) {
         long id = userEmails.size() + 1;
         userEmail.setId(id);
 
         userEmails.add(userEmail);
     }
 
-    public void update(UserEmailName userEmail) {
+    public void update(UserData userEmail) {
         long id = userEmail.getId();
-        UserEmailName user = findOne(id);
+        UserData user = findOne(id);
         user.setName(userEmail.getName());
         user.setEmail(userEmail.getEmail());
 
@@ -36,7 +35,7 @@ public class NewEmailService {
         userEmails.remove(index);
     }
 
-    public UserEmailName findOne(long id) {
+    public UserData findOne(long id) {
         return userEmails.stream()
                 .filter(e -> e.getId() == id)
                 .findAny().get();

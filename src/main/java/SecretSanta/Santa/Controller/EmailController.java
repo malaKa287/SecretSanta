@@ -1,9 +1,9 @@
 package SecretSanta.Santa.Controller;
 
 import SecretSanta.Santa.Model.EmailModel;
-import com.sun.mail.smtp.SMTPAddressFailedException;
+import SecretSanta.Santa.Model.UserData;
+import SecretSanta.Santa.Model.UserDataService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.MailSendException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
@@ -22,12 +22,24 @@ public class EmailController {
     EmailModel emailModel;
 
     @Autowired
+    UserDataService userDataService;
+
+    @Autowired
     JavaMailSender javaMailSender;
+
+    @GetMapping("/sendEmail")
+    public String sendEmail(){
+        System.out.println(userDataService.findAll());
+
+
+
+        return "santa";
+    }
 
     private Map<String,String> pairedMap = new HashMap<>();
 
-    @GetMapping("/sendEmail")
-    public String sendEmail() {
+    @GetMapping("/sendEmail1")
+    public String sendEmail1() {
         System.out.println(emailModel.getEmailsMap());
 
         randomPair();
