@@ -27,8 +27,13 @@ public class NewEmailService {
         user.setName(userEmail.getName());
         user.setEmail(userEmail.getEmail());
 
-        userEmails.set((int) id-1, user);
+        userEmails.set((int) (id-1), user);
 
+    }
+
+    public void delete(long id){
+        int index = (int) (id - 1);
+        userEmails.remove(index);
     }
 
     public UserEmailName findOne(long id) {

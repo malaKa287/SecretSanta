@@ -8,17 +8,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class SantaApplication implements CommandLineRunner {
+public class SantaApplication {
 
-	@Autowired
-	NewEmailService emailService;
+    public static void main(String[] args) {
+        SpringApplication.run(SantaApplication.class, args);
+    }
 
-	public static void main(String[] args) {
-		SpringApplication.run(SantaApplication.class, args);
-	}
-
-	@Override
-	public void run(String... args){
-		emailService.save(new UserEmailName("name", "email"));
-	}
 }

@@ -35,6 +35,13 @@ public class NewEmailController {
         return "redirect:/";
     }
 
+    @GetMapping("/delete")
+    public String delete(long id){
+        emailService.delete(id);
+
+        return "redirect:/";
+    }
+
     @GetMapping("/findOne")
     @ResponseBody
     public UserEmailName findOne(long id){

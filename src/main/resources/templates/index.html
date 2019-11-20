@@ -29,7 +29,10 @@
                     <td th:text="${userdata.id}"></td>
                     <td th:text="${userdata.name}"></td>
                     <td th:text="${userdata.email}"></td>
-                    <td> <a th:href="@{findOne/(id=${userdata.id})}" class="btn btn-primary eBtn">Edit</a> </td>
+                    <td>
+                        <a th:href="@{findOne/(id=${userdata.id})}" class="btn btn-primary eBtn">Edit</a>
+                        <a th:href="@{delete/(id=${userdata.id})}" class="btn btn-danger delBtn">Delete</a>
+                    </td>
                 </tr>
                 </tbody>
             </table>
@@ -51,8 +54,8 @@
                         </div>
                         <div class="modal-body">
                             <!--<div class="form-group">-->
-                                <!--<label for="id" class="col-form-label">Id:</label>-->
-                                <!--<input type="text" class="form-control" id="id" name="id" value=""/>-->
+                            <!--<label for="id" class="col-form-label">Id:</label>-->
+                            <!--<input type="text" class="form-control" id="id" name="id" value=""/>-->
                             <!--</div>-->
                             <div class="form-group">
                                 <label for="name" class="col-form-label">Name:</label>
@@ -66,12 +69,36 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <input type="submit" class="btn btn-primary" value="save" />
+                            <input type="submit" class="btn btn-primary" value="save"/>
                         </div>
                     </div>
                 </div>
             </div>
         </form>
+    </div>
+
+
+
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabelDel">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p class="alert alert-danger">
+                        Are you sure?
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <a href="" class="btn btn-danger" id="delRef">Delete</a>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 

@@ -2,7 +2,7 @@
 
 $(document).ready(function(){
 
-    $('.nBtn, .table, .eBtn').on('click',function(event){
+    $('.nBtn, .table, .eBtn, .dBtn').on('click',function(event){
         event.preventDefault();
         var href = $(this).attr('href');
         var text = $(this).text();
@@ -20,6 +20,13 @@ $(document).ready(function(){
             $('.myForm #email').val('');
             $('.myForm #exampleModal').modal();
         }
+    });
+
+    $('.table .delBtn').on('click', function(event){
+        event.preventDefault();
+        var href = $(this).attr('href');
+        $('#myModal #delRef').attr('href', href);
+        $('#myModal').modal();
     });
 
 });
