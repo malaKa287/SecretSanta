@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <script type="text/javascript" src="webjars/jquery/3.1.0/jquery.min.js"></script>
+    <script type="text/javascript" src="webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="webjars/bootstrap/4.3.1/css/bootstrap.min.css"/>
+    <script type="text/javascript" th:src="@{js/main.js}" src="../static/js/main.js"></script>
+</head>
+<body>
+
+<div class="container">
+    <button class="btn btn-success nBtn">New</button>
+    <div class="card">
+        <div class="card-block">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="userdata : ${data}">
+                    <td th:text="${userdata.id}"></td>
+                    <td th:text="${userdata.name}"></td>
+                    <td th:text="${userdata.email}"></td>
+                    <td> <a th:href="@{findOne/(id=${userdata.id})}" class="btn btn-primary eBtn">Edit</a> </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+    <div class="myForm">
+        <form th:action="@{/save}" method="post">
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Update or create</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <!--<div class="form-group">-->
+                                <!--<label for="id" class="col-form-label">Id:</label>-->
+                                <!--<input type="text" class="form-control" id="id" name="id" value=""/>-->
+                            <!--</div>-->
+                            <div class="form-group">
+                                <label for="name" class="col-form-label">Name:</label>
+                                <input type="text" class="form-control" id="name" name="name" value=""/>
+                            </div>
+                            <div class="form-group">
+                                <label for="email" class="col-form-label">Email:</label>
+                                <input type="text" class="form-control" id="email" name="email" value=""/>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <input type="submit" class="btn btn-primary" value="save" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>
