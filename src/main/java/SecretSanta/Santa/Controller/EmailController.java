@@ -18,8 +18,9 @@ import java.util.stream.IntStream;
 @Controller
 public class EmailController {
 
-    @Autowired
-    EmailModel emailModel;
+//    @Autowired
+//    EmailModel emailModel;
+    EmailModel emailModel = new EmailModel();
 
     @Autowired
     JavaMailSender javaMailSender;
