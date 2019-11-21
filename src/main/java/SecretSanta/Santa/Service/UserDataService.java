@@ -1,5 +1,6 @@
-package SecretSanta.Santa.Model;
+package SecretSanta.Santa.Service;
 
+import SecretSanta.Santa.Model.UserData;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

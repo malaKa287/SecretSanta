@@ -1,6 +1,6 @@
 package SecretSanta.Santa.Controller;
 
-import SecretSanta.Santa.Model.UserDataService;
+import SecretSanta.Santa.Service.UserDataService;
 import SecretSanta.Santa.Model.UserData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

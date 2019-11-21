@@ -106,5 +106,14 @@
     <a th:href="@{sendEmail}" class="btn btn-primary">Send emails</a>
 </div>
 
+
+<div>
+    <form th:action="@{/uploadExcel}" method="post" enctype="multipart/form-data">
+        <input type="file" name="file" accept=".xls,.xlsx" />
+        <br>
+        <input type="submit" value="Upload file" />
+    </form>
+</div>
+
 </body>
 </html>

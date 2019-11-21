@@ -1,7 +1,7 @@
 package SecretSanta.Santa.Controller;
 
 import SecretSanta.Santa.Model.UserData;
-import SecretSanta.Santa.Model.UserDataService;
+import SecretSanta.Santa.Service.UserDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
