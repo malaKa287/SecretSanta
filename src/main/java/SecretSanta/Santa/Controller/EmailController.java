@@ -1,6 +1,5 @@
 package SecretSanta.Santa.Controller;
 
-import SecretSanta.Santa.Model.EmailModel;
 import SecretSanta.Santa.Model.UserData;
 import SecretSanta.Santa.Model.UserDataService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,14 +11,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 @Controller
 public class EmailController {
-
-    @Autowired
-    EmailModel emailModel;
 
     @Autowired
     UserDataService userDataService;
@@ -29,15 +23,15 @@ public class EmailController {
 
     @GetMapping("/sendEmail")
     public String sendEmail() {
-        System.out.println(userDataService.findAll());
-
         List<UserData> userDataList = userDataService.findAll();
 
 //        for (int i = 0; i < 10; i++) {
-            List<UserData> shuffledList = shuffleCollection(userDataList);
-            System.out.println(shuffledList);
+        List<UserData> shuffledList = shuffleCollection(userDataList);
+        System.out.println(shuffledList);
 //        }
 
+
+//        sendMail(userDataList);
 
         return "santa";
     }
@@ -52,14 +46,16 @@ public class EmailController {
         for (int i = 0; i < userDataList.size(); i++) {
             String emailTo;
             String recipientName;
+
+            if (i == (userDataList.size() - 1)) {
+                emailTo = userDataList.get(i).getEmail();
+                recipientName = userDataList.get(0).getName();
+            } else {
+                emailTo = userDataList.get(i).getEmail();
+                recipientName = userDataList.get(i + 1).getName();
+            }
+
             try {
-                if (i == (userDataList.size() - 1)) {
-                    emailTo = userDataList.get(i).getEmail();
-                    recipientName = userDataList.get(0).getName();
-                } else {
-                    emailTo = userDataList.get(i).getEmail();
-                    recipientName = userDataList.get(i + 1).getName();
-                }
                 helper = new MimeMessageHelper(message, true);
                 helper.setTo(emailTo);
                 helper.setText("Ho ho ho, Santa is coming. " + recipientName + " already waiting for your gift.");
