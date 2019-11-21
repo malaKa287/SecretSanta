@@ -19,6 +19,9 @@ public class EmailController {
     UserDataService userDataService;
 
     @Autowired
+    MultipartFileController multipartFileController;
+
+    @Autowired
     JavaMailSender javaMailSender;
 
     @GetMapping("/sendEmail")
@@ -26,8 +29,11 @@ public class EmailController {
         List<UserData> userDataList = userDataService.findAll();
 
 //        for (int i = 0; i < 10; i++) {
-        List<UserData> shuffledList = shuffleCollection(userDataList);
-        System.out.println(shuffledList);
+            List<UserData> shuffledList = shuffleCollection(userDataList);
+            System.out.println(shuffledList);
+
+            Map<String, String> pairedMap = pairMap(userDataList);
+            System.out.println("paired map: " + pairedMap);
 //        }
 
 
@@ -35,8 +41,6 @@ public class EmailController {
 
         return "santa";
     }
-
-    private Map<String, String> pairedMap = new HashMap<>();
 
 
     public void sendMail(List<UserData> userDataList) {
@@ -72,30 +76,49 @@ public class EmailController {
     }
 
 
-    public static List<UserData> shuffleCollection(List<UserData> userDataList) {
+    public List<UserData> shuffleCollection(List<UserData> userDataList) {
         Collections.shuffle(userDataList);
 
+        Map<String, String> excelMap = multipartFileController.getExcelMap();
+
+        String senderEmail;
+        String recipientEmail;
         for (int i = 0; i < userDataList.size(); i++) {
-            String emailFrom;
-            String emailTo;
-
             if (i == (userDataList.size() - 1)) {
-                emailFrom = userDataList.get(i).getEmail();
-                emailTo = userDataList.get(0).getEmail();
+                senderEmail = userDataList.get(i).getEmail();
+                recipientEmail = userDataList.get(0).getEmail();
+            } else {
+                senderEmail = userDataList.get(i).getEmail();
+                recipientEmail = userDataList.get(i + 1).getEmail();
+            }
+            for (Map.Entry<String, String> entry : excelMap.entrySet()) {
+                String emailFromBanned = entry.getKey();
+                String emailToBanned = entry.getValue();
 
-                if (emailFrom.equals("email1") && emailTo.equals("email2")) {
+                if (senderEmail.equals(emailFromBanned) && recipientEmail.equals(emailToBanned)) {
                     shuffleCollection(userDataList);
                 }
-            } else {
-                emailFrom = userDataList.get(i).getEmail();
-                emailTo = userDataList.get(i + 1).getEmail();
-            }
-
-            if (emailFrom.equals("email1") && emailTo.equals("email2")) {
-                shuffleCollection(userDataList);
             }
         }
+
         return userDataList;
+    }
+
+    public Map<String, String> pairMap(List<UserData> userDataList){
+        Map<String, String> pairedMap = new HashMap<>();
+        String senderEmail;
+        String recipientEmail;
+        for (int i = 0; i < userDataList.size(); i++){
+            if (i == (userDataList.size() - 1)) {
+                senderEmail = userDataList.get(i).getEmail();
+                recipientEmail = userDataList.get(0).getEmail();
+            } else {
+                senderEmail = userDataList.get(i).getEmail();
+                recipientEmail = userDataList.get(i + 1).getEmail();
+            }
+            pairedMap.put(senderEmail, recipientEmail);
+        }
+        return pairedMap;
     }
 
 }

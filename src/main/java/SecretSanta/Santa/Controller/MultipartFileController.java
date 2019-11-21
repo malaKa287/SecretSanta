@@ -1,5 +1,6 @@
 package SecretSanta.Santa.Controller;
 
+import lombok.Getter;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
@@ -20,10 +22,11 @@ import java.util.Map;
 public class MultipartFileController {
 
     private String fileLocation;
+    @Getter
     private Map<String, String> excelMap = new HashMap<>();
 
     @PostMapping("/uploadExcel")
-    public String uploadFile(Model model, MultipartFile file) {
+    public String uploadFile(Model model, @RequestParam("file") MultipartFile file) {
         String fileName = file.getOriginalFilename();
         System.out.println("read: " + fileName);
         try {
@@ -47,7 +50,7 @@ public class MultipartFileController {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        fillExcelMap(fileName);
+        fillExcelMap();
 
         System.out.println("excel map: " + excelMap);
 
@@ -56,9 +59,9 @@ public class MultipartFileController {
         return "index";
     }
 
-    public void fillExcelMap(String fileName){
+    public void fillExcelMap(){
         try {
-            FileInputStream fis = new FileInputStream(new File(fileName));
+            FileInputStream fis = new FileInputStream(new File(fileLocation));
             Workbook workbook = new XSSFWorkbook(fis);
             Sheet sheet = workbook.getSheetAt(0);
 
