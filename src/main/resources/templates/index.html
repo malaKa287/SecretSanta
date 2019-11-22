@@ -9,6 +9,7 @@
     <script type="text/javascript" src="webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="webjars/bootstrap/4.3.1/css/bootstrap.min.css"/>
     <script type="text/javascript" th:src="@{js/main.js}" src="../static/js/main.js"></script>
+    <link rel="stylesheet" th:href="@{css/bootstrap.css}" />
 </head>
 <body>
 
@@ -106,12 +107,16 @@
     <a th:href="@{sendEmail}" class="btn btn-primary">Send emails</a>
 </div>
 
+<br>
+<br>
 
-<div>
-    <form th:action="@{/uploadExcel}" method="post" enctype="multipart/form-data">
+<div class="mrL-400">
+    <h3>Upload your excel file</h3>
+    <br>
+    <form th:action="@{/uploadExcel}" method="post" enctype="multipart/form-data" style="" >
         <input type="file" name="file" accept=".xls,.xlsx" />
         <br>
-        <input type="submit" value="Upload file" />
+        <input type="submit" value="Upload file" class="btn btn-info"/>
     </form>
 </div>
 
