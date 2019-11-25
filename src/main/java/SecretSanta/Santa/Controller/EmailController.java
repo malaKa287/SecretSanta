@@ -1,6 +1,7 @@
 package SecretSanta.Santa.Controller;
 
 import SecretSanta.Santa.Model.UserData;
+import SecretSanta.Santa.Service.EmailService;
 import SecretSanta.Santa.Service.UserDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -25,6 +26,9 @@ public class EmailController {
     @Autowired
     JavaMailSender javaMailSender;
 
+    @Autowired
+    EmailService emailService;
+
     @GetMapping("/sendEmail")
     public String sendEmail() {
         List<UserData> userDataList = userDataService.findAll();
@@ -38,7 +42,9 @@ public class EmailController {
 //        }
 
 
-        sendMail(shuffledList);
+//        sendMail(shuffledList);
+
+        emailService.buildEmail(shuffledList);
 
         return "santa";
     }
