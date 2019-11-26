@@ -32,79 +32,40 @@ public class EmailService {
     @Autowired
     private Configuration freemarkerConfig;
 
-    byte[] santaPictureByte;
-
-    {
-        try {
-            santaPictureByte = IOUtils.toByteArray(new ClassPathResource("files/email-template/santa.jpg").getInputStream());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     public void sendEmail(Mail mail) {
         try {
-//            MimeMessage message = emailSender.createMimeMessage();
-//            MimeMessageHelper helper = new MimeMessageHelper(message,
-//                    MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
-//                    StandardCharsets.UTF_8.name());
-//
-////            helper.addAttachment("santa.jpg", new ClassPathResource("files/email-template/santa.jpg"));
-//
-            Template t = freemarkerConfig.getTemplate("secret santa.ftl");
-//            String html = FreeMarkerTemplateUtils.processTemplateIntoString(t, mail.getModel());
-//
-//            helper.setTo(mail.getTo());
-//            helper.setText(html, true);
-//            helper.setSubject(mail.getSubject());
-//            helper.setFrom(mail.getFrom());
+            MimeMessage message = emailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message,
+                    MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
+                    StandardCharsets.UTF_8.name());
 
-            ////////
+            Template template = freemarkerConfig.getTemplate("secret santa.ftl");
+            String html = FreeMarkerTemplateUtils.processTemplateIntoString(template, mail.getModel());
+
+            helper.setTo(mail.getTo());
+            helper.setText(html, true);
+            helper.setSubject(mail.getSubject());
+
             StringWriter writer = new StringWriter();
-            t.process(mail.getModel(), writer);
+            template.process(mail.getModel(), writer);
+            String strTemplate = writer.toString();
 
-            String s = writer.toString();
-
-            String userName = "Secret.Santa.EPAM2019@gmail.com";
-            String password = "asdasdaw12";
-
-            Properties properties = new Properties();
-            properties.put("mail.smtp.host", "smtp.gmail.com");
-            properties.put("mail.smtp.port", "587");
-            properties.put("mail.smtp.auth", "true");
-            properties.put("mail.smtp.starttls.enable", "true");
-            properties.put("mail.user", userName);
-            properties.put("mail.password", password);
-
-            // creates a new session with an authenticator
-            Authenticator auth = new Authenticator() {
-                public PasswordAuthentication getPasswordAuthentication() {
-                    return new PasswordAuthentication(userName, password);
-                }
-            };
-            Session session = Session.getInstance(properties, auth);
-
-            // creates a new e-mail message
-            Message msg = new MimeMessage(session);
-
-            msg.setFrom(new InternetAddress(userName));
-            msg.setRecipients(Message.RecipientType.TO, (InternetAddress.parse("ruslan_lelyk@epam.com")));
-//            msg.setRecipients(Message.RecipientType.CC, (InternetAddress.parse(toCC)));
-            msg.setSubject("santa");
-            msg.setSentDate(new Date());
-            // creates message part
             MimeBodyPart messageBodyPart = new MimeBodyPart();
-            messageBodyPart.setContent(s, "text/html;  charset=utf-8");
+            messageBodyPart.setContent(strTemplate, "text/html;  charset=utf-8");
 
-            // creates multi-part
             Multipart multipart = new MimeMultipart();
             multipart.addBodyPart(messageBodyPart);
 
-            // adds inline image attachments
+            // add inline image attachments
             Map<String, byte[]> pictureMap = new HashMap();
 
-            pictureMap.put("santa_picture", santaPictureByte);
-
+            try {
+                byte[]  santaPictureBytes = IOUtils.toByteArray(new ClassPathResource("files/email-template/santa.jpg").getInputStream());
+                pictureMap.put("santa_picture", santaPictureBytes);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
             if (pictureMap != null && pictureMap.size() > 0) {
                 Set<String> setImageID = pictureMap.keySet();
@@ -129,10 +90,9 @@ public class EmailService {
                 }
             }
 
-            msg.setContent(multipart);
-            Transport.send(msg);
+            message.setContent(multipart);
 
-//            emailSender.send(message);
+            emailSender.send(message);
         } catch (Exception e) {
             System.out.println("!!!!!!!!!!!!!!!! sendSimpleMessage exception");
             e.printStackTrace();
@@ -140,28 +100,30 @@ public class EmailService {
     }
 
     public void buildEmail(List<UserData> shuffledList) {
-        Mail mail = new Mail();
-
         for (int i = 0; i < shuffledList.size(); i++) {
+            Mail mail = new Mail();
+
             String emailTo;
             String recipientName;
-            String emailToName;
+            String senderName;
 
             if (i == (shuffledList.size() - 1)) {
                 emailTo = shuffledList.get(i).getEmail();
-                emailToName = shuffledList.get(i).getName();
+                senderName = shuffledList.get(i).getName();
                 recipientName = shuffledList.get(0).getName();
             } else {
                 emailTo = shuffledList.get(i).getEmail();
                 recipientName = shuffledList.get(i + 1).getName();
-                emailToName = shuffledList.get(i).getName();
+                senderName = shuffledList.get(i).getName();
             }
 
             mail.setTo(emailTo);
+            mail.setRecipientName(senderName);
+            mail.setRecipientName(recipientName);
             mail.setSubject("santa");
 
             Map<String, String> model = new HashMap();
-            model.put("name", emailToName);
+            model.put("name", senderName);
             model.put("recipient", recipientName);
             model.put("price", "200");
 
@@ -169,6 +131,51 @@ public class EmailService {
 
             sendEmail(mail);
         }
+        // clear gmail folders
+        deleteSentEmail();
+    }
 
+    public void deleteSentEmail() {
+        try {
+            Properties properties = new Properties();
+            properties.put("mail.imap.host", "smtp.gmail.com");
+            properties.put("mail.imap.port", "587");
+            properties.put("mail.imap.starttls.enable", "true");
+
+            Session session = Session.getInstance(properties);
+            Store store = session.getStore("imaps");
+            store.connect("smtp.gmail.com", "Secret.Santa.EPAM2019@gmail.com", "asdasdaw12");
+
+            Folder folder = store.getFolder("[Gmail]/Надіслані");
+            Folder folderBucket = store.getFolder("[Gmail]/Кошик");
+            Folder allEmails = store.getFolder("[Gmail]/Уся пошта");
+
+            folder.open(Folder.READ_WRITE);
+            folderBucket.open(Folder.READ_WRITE);
+            allEmails.open(Folder.READ_WRITE);
+
+            Message[] messages = folder.getMessages();
+            Message[] messagesBucket = folderBucket.getMessages();
+            Message[] allMessages = allEmails.getMessages();
+
+            for (Message messageSent: messages) {
+                messageSent.setFlag(Flags.Flag.DELETED, true);
+            }
+            for (Message messageBucket: messagesBucket) {
+                messageBucket.setFlag(Flags.Flag.DELETED, true);
+            }
+            for (Message messageAll: allMessages) {
+                messageAll.setFlag(Flags.Flag.DELETED, true);
+            }
+
+            folder.close(true);
+            folderBucket.close(true);
+            allEmails.close(true);
+            store.close();
+
+            System.out.println("Gmail account is cleared");
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
     }
 }
