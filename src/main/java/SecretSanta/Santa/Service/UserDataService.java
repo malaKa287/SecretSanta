@@ -32,8 +32,12 @@ public class UserDataService {
     }
 
     public void delete(long id){
-        int index = (int) (id - 1);
-        userEmails.remove(index);
+        try {
+            int index = (int) (id - 1);
+            userEmails.remove(index);
+        } catch (Exception ex){
+            System.out.println("delete error");
+        }
     }
 
     public UserData findOne(long id) {

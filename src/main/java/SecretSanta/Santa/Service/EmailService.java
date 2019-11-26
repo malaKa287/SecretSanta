@@ -6,6 +6,7 @@ import freemarker.core.ParseException;
 import freemarker.template.*;
 import org.apache.commons.compress.utils.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -31,6 +32,9 @@ public class EmailService {
 
     @Autowired
     private Configuration freemarkerConfig;
+
+    @Value("${emailService.price}")
+    private String price;
 
 
     public void sendEmail(Mail mail) {
@@ -125,7 +129,7 @@ public class EmailService {
             Map<String, String> model = new HashMap();
             model.put("name", senderName);
             model.put("recipient", recipientName);
-            model.put("price", "200");
+            model.put("price", price);
 
             mail.setModel(model);
 

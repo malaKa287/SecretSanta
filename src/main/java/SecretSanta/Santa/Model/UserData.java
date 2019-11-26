@@ -5,6 +5,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.validation.constraints.Email;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -12,6 +14,7 @@ import lombok.ToString;
 public class UserData {
     private long id;
     private String name;
+    @Email(message = "wrong email")
     private String email;
 
     public UserData(String name, String email) {

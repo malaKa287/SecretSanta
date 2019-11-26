@@ -9,7 +9,7 @@ $(document).ready(function(){
 
         if (text == 'Edit'){
             $.get(href, function(userdata,status){
-//               $('.myForm #id').val(userdata.id);
+               $('.myForm #id').val(userdata.id);
                $('.myForm #name').val(userdata.name);
                $('.myForm #email').val(userdata.email);
             });

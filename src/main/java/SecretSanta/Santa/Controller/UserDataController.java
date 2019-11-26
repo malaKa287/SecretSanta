@@ -5,40 +5,42 @@ import SecretSanta.Santa.Model.UserData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @Controller
 //@RequestMapping("/new")
 public class UserDataController {
 
     @Autowired
-    UserDataService emailService;
+    UserDataService userDataService;
 
 
     @GetMapping("/santa")
     public String showPage(Model model){
-        model.addAttribute("data", emailService.findAll());
+        model.addAttribute("data", userDataService.findAll());
 
         return "index";
     }
 
     @PostMapping("/save")
-    public String save(UserData emailName){
-        emailService.save(emailName);
+    public String save(@Valid @ModelAttribute("data") UserData emailName, BindingResult bindingResult){
+        if (bindingResult.hasErrors()){
+            System.out.println("error");
+
+        } else {
+            userDataService.save(emailName);
+        }
 
         return "redirect:/santa";
     }
 
-    @PutMapping("/update")
-    public String update(UserData emailName){
-        emailService.update(emailName);
-
-        return "redirect:/santa";
-    }
 
     @GetMapping("/delete")
     public String delete(long id){
-        emailService.delete(id);
+        userDataService.delete(id);
 
         return "redirect:/santa";
     }
@@ -46,6 +48,7 @@ public class UserDataController {
     @GetMapping("/findOne")
     @ResponseBody
     public UserData findOne(long id){
-        return emailService.findOne(id);
+        System.out.println(userDataService.findOne(id));
+        return userDataService.findOne(id);
     }
 }
