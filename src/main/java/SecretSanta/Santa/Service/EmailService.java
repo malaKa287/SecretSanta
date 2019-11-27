@@ -36,6 +36,19 @@ public class EmailService {
     @Value("${emailService.price}")
     private String price;
 
+    @Value("${spring.mail.username}")
+    private String login;
+    @Value("${spring.mail.password}")
+    private String password;
+    @Value("${spring.mail.host}")
+    private String host;
+    @Value("${spring.mail.port}")
+    private String port;
+    @Value("${spring.mail.properties.mail.smtp.starttls.enable}")
+    private String ifTLS;
+    @Value("${gmail.protocol}")
+    private String protocol;
+
 
     public void sendEmail(Mail mail) {
         try {
@@ -142,13 +155,13 @@ public class EmailService {
     public void deleteSentEmail() {
         try {
             Properties properties = new Properties();
-            properties.put("mail.imap.host", "smtp.gmail.com");
-            properties.put("mail.imap.port", "587");
-            properties.put("mail.imap.starttls.enable", "true");
+            properties.put("mail.imap.host", host);
+            properties.put("mail.imap.port", port);
+            properties.put("mail.imap.starttls.enable", ifTLS);
 
             Session session = Session.getInstance(properties);
-            Store store = session.getStore("imaps");
-            store.connect("smtp.gmail.com", "Secret.Santa.EPAM2019@gmail.com", "asdasdaw12");
+            Store store = session.getStore(protocol);
+            store.connect("smtp.gmail.com", login, password);
 
             Folder folder = store.getFolder("[Gmail]/Надіслані");
             Folder folderBucket = store.getFolder("[Gmail]/Кошик");

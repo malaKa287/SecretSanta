@@ -28,7 +28,7 @@ public class UserDataController {
     @PostMapping("/save")
     public String save(@Valid @ModelAttribute("data") UserData emailName, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
-            System.out.println("error");
+            System.out.println("wrong email");
 
         } else {
             userDataService.save(emailName);
