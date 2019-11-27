@@ -24,24 +24,14 @@ public class EmailController {
     MultipartFileController multipartFileController;
 
     @Autowired
-    JavaMailSender javaMailSender;
-
-    @Autowired
     EmailService emailService;
 
     @GetMapping("/sendEmail")
     public String sendEmail() {
         List<UserData> userDataList = userDataService.findAll();
 
-//        for (int i = 0; i < 10; i++) {
-            List<UserData> shuffledList = shuffleCollection(userDataList);
-            System.out.println("shuffledList: " + shuffledList);
-
-//            Map<String, String> pairedMap = pairMap(userDataList);
-//            System.out.println("paired map: " + pairedMap);
-//        }
-
-
+        List<UserData> shuffledList = shuffleCollection(userDataList);
+//            System.out.println("shuffledList: " + shuffledList);
 
         emailService.buildEmail(shuffledList);
 
@@ -94,7 +84,6 @@ public class EmailController {
 //        }
 //        return pairedMap;
 //    }
-
 
 
 }

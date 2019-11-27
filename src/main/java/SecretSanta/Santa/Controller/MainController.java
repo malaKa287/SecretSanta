@@ -15,13 +15,7 @@ public class MainController {
 
     @PostMapping("/santa")
 //    public String confirmEmails(@Valid @ModelAttribute("emails") EmailModel emails, BindingResult bindingResult) {
-    public String confirmEmails(BindingResult bindingResult) {
-
-        if (bindingResult.hasErrors()){
-            System.out.println("error email");
-            return "main";
-        }
-
+    public String confirmEmails() {
 
         return "redirect:/sendEmail";
     }
